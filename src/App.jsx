@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button"
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Button>Shadcn Jalan</Button>
-    </div>
-  )
+    <AdminDashboard />
+  );
 }
 
-export default App
+export default App;
