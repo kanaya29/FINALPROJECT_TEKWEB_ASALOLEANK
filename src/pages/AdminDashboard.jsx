@@ -58,23 +58,33 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-8 flex justify-center">
-      <div className="w-full max-w-6xl space-y-6">
-        <AdminHeader />
+  <div className="min-h-screen bg-slate-50 w-full">
 
-        <div className="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200">
-          <div className="bg-indigo-500 p-4 text-white font-bold text-lg">
-            Admin Dashboard
-          </div>
+    <div className="p-4 md:px-10">
+      <AdminHeader />
+    </div>
 
-          <div className="p-6 space-y-8">
-            <FormData onAdd={addEvent} onEdit={updateEvent} editingEvent={editingEvent} />
-            <DataTable data={events} onDelete={deleteEvent} onEdit={editEvent} />
-          </div>
+    <div className="w-full px-4 md:px-10 pb-10">
+      <div className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-200 w-full">
+
+        <div className="bg-[#5c7cfa] p-5 text-white font-bold text-xl shadow-inner">
+          Admin Dashboard
+        </div>
+
+        <div className="p-6 md:p-10 space-y-12">
+          <section>
+            <FormData onAdd={addEvent} />
+          </section>
+          
+          <hr className="border-gray-100" />
+          
+          <section className="overflow-x-auto">
+            <DataTable data={events} onDelete={deleteEvent} />
+          </section>
         </div>
       </div>
     </div>
+  </div>
   );
-};
-
+}
 export default AdminDashboard;
