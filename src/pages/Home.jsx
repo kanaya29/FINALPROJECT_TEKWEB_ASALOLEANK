@@ -4,6 +4,7 @@ import foto_homapge from "../assets/gambar_homepage.png"
 
 export default function Home({ events = [] }) {
   return (
+ feature-user
     <div>
       <section className="bg-blue-200 py-4 px-6 pt-28 mb-3">
         <div className="max-w-4xl mx-auto flex flex-col items-center gap-20 md:flex-row-reverse mb-3">
@@ -31,6 +32,13 @@ export default function Home({ events = [] }) {
 
       <div className="mb-4">
         <h1 className="text-2xl font-bold text-center">Event Terdekat</h1>
+
+    <div className="w-full flex flex-col">
+      <div id="Home" className="mt-4 mb-2">
+        <h1 className="text-2xl font-bold text-center text-gray-800">
+          Event Terbaru
+        </h1>
+ main
       </div>
 
 
@@ -46,8 +54,13 @@ export default function Home({ events = [] }) {
         )}
       </div>
     </div>
+ feature-user
   )
 }
 
 
 
+
+  );
+}
+ main
