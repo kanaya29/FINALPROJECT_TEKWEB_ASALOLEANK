@@ -2,9 +2,11 @@ import ProductCard from "../components/public/ProductCard";
 
 export default function Home({ event }) {
   return (
-    <div>
-      <div id="Home" className="mb-4">
-        <h1 className="text-2xl font-bold text-center ">Event Terbaru</h1>
+    <div className="w-full flex flex-col">
+      <div id="Home" className="mt-4 mb-2">
+        <h1 className="text-2xl font-bold text-center text-gray-800">
+          Event Terbaru
+        </h1>
       </div>
 
       <div

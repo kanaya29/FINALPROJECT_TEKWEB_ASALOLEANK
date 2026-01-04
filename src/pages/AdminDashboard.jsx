@@ -1,90 +1,93 @@
-import React, { useState } from 'react';
-import AdminHeader from '../components/admin/AdminHeader';
-import FormData from '../components/admin/FormData';
-import DataTable from '../components/admin/DataTable';
+import { useState } from "react";
+import { LayoutDashboard, PlusCircle, ListTodo } from "lucide-react";
+import AdminHeader from "../components/admin/AdminHeader";
+import FormData from "../components/admin/FormData";
+import DataTable from "../components/admin/DataTable";
+import poster from "../assets/poster.jpg"; 
 
-const AdminDashboard = () => {
-  const [events, setEvents] = useState([
-    {
-      id: "1",
-      name: "Jazz Gunung 2025",
-      category: "Music",
-      date: "2025-08-12",
-      price: 750000,
-      location: "Bromo Amphitheater",
-      description: "Konser jazz etnik di ketinggian 2000mdpl.",
-      image: "https://url-poster-event.jpg"
-    },
-    {
-      id: "2",
-      name: "Tech Conference 2025",
-      category: "Tech",
-      date: "2025-02-05",
-      price: 350000,
-      location: "Bandung Convention Center",
-      description: "Konferensi teknologi terbesar di Bandung.",
-      image: "https://url-poster-event2.jpg"
-    },
-    {
-      id: "3",
-      name: "Food Festival Jakarta",
-      category: "Food",
-      date: "2025-03-20",
-      price: 50000,
-      location: "Jakarta International Expo",
-      description: "Festival kuliner dengan berbagai stan makanan unik.",
-      image: "https://url-poster-event3.jpg"
-    }
-  ]);
-
+const AdminDashboard = ({ events, setEvents }) => {
   const [editingEvent, setEditingEvent] = useState(null);
 
-  const addEvent = (newEvent) => {
-    setEvents([...events, { ...newEvent, id: Date.now().toString() }]);
-    console.log("Event Baru Ditambahkan!", newEvent);
+  const addEvent = (event) => {
+    setEvents([...events, { ...event, id: Date.now().toString() }]);
+  };
+
+  const updateEvent = (event) => {
+    setEvents(events.map((e) => (e.id === event.id ? event : e)));
+    setEditingEvent(null);
   };
 
   const deleteEvent = (id) => {
-    setEvents(events.filter(event => event.id !== id));
-    console.log(`Event dengan ID ${id} Berhasil Dihapus`);
-  };
-
-  const editEvent = (event) => setEditingEvent(event);
-
-  const updateEvent = (updatedEvent) => {
-    setEvents(events.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev));
-    setEditingEvent(null);
-    console.log(`Event dengan ID ${updatedEvent.id} Berhasil Diperbarui`);
+    setEvents(events.filter((e) => e.id !== id));
   };
 
   return (
-  <div className="min-h-screen bg-slate-50 w-full">
-
-    <div className="p-4 md:px-10">
+    <div className="min-h-screen bg-[#f0f7ff]"> 
       <AdminHeader />
-    </div>
 
-    <div className="w-full px-4 md:px-10 pb-10">
-      <div className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-200 w-full">
-
-        <div className="bg-[#5c7cfa] p-5 text-white font-bold text-xl shadow-inner">
-          Admin Dashboard
+      <div className="max-w-7xl mx-auto py-10 space-y-10">
+        
+        <div className="bg-gradient-to-r bg-blue-500 rounded-3xl p-8 text-white shadow-xl flex justify-between items-center overflow-hidden relative">
+          <div className="relative z-10">
+            <h1 className="text-3xl font-extrabold flex items-center gap-3">
+              <LayoutDashboard className="w-8 h-8" />
+              Halo, Admin!
+            </h1>
+            <p className="mt-2 text-blue-50 font-medium">
+              Kelola tiket event kamu dengan lebih mudah dan bergaya.
+            </p>
+          </div>
+          <img 
+            src={poster} 
+            alt="decoration" 
+            className="w-48 h-48 object-cover rounded-2xl rotate-12 absolute -right-8 -bottom-8 opacity-30 blur-[1px]"
+          />
         </div>
 
-        <div className="p-6 md:p-10 space-y-12">
-          <section>
-            <FormData onAdd={addEvent} />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <section className="lg:col-span-5 bg-white p-8 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-blue-50/50">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="p-3 bg-blue-100 rounded-2xl">
+                <PlusCircle className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-slate-800">
+                  {editingEvent ? "Edit Event" : "Buat Event Baru"}
+                </h2>
+                <p className="text-sm text-slate-400">Isi data detail event di bawah</p>
+              </div>
+            </div>
+            
+            <FormData
+              onAdd={addEvent}
+              onEdit={updateEvent}
+              editingEvent={editingEvent}
+            />
           </section>
-          
-          <hr className="border-gray-100" />
-          
-          <section className="overflow-x-auto">
-            <DataTable data={events} onDelete={deleteEvent} />
+
+          <section className="lg:col-span-7 bg-white p-8 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-blue-50/50">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="p-3 bg-green-100 rounded-2xl">
+                <ListTodo className="w-6 h-6 text-green-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-slate-800">Daftar Event</h2>
+                <p className="text-sm text-slate-400">Total {events.length} event terdaftar</p>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-100 overflow-hidden">
+              <DataTable
+                data={events}
+                onEdit={setEditingEvent}
+                onDelete={deleteEvent}
+              />
+            </div>
           </section>
         </div>
       </div>
     </div>
-  </div>
   );
-}
+};
+
 export default AdminDashboard;
