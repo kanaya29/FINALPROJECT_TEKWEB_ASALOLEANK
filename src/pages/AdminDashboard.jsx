@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { LayoutDashboard, PlusCircle, ListTodo } from "lucide-react";
+import { useState, useEffect } from "react";
+import { LayoutDashboard, PlusCircle, ListTodo, CheckCircle2 } from "lucide-react";
 import AdminHeader from "../components/admin/AdminHeader";
 import FormData from "../components/admin/FormData";
 import DataTable from "../components/admin/DataTable";
@@ -7,22 +7,47 @@ import poster from "../assets/poster.jpg";
 
 const AdminDashboard = ({ events, setEvents }) => {
   const [editingEvent, setEditingEvent] = useState(null);
+  
+  const [toast, setToast] = useState({ show: false, message: "" });
+
+  const showNotification = (msg) => {
+    setToast({ show: true, message: msg });
+    
+    setTimeout(() => {
+      setToast({ show: false, message: "" });
+    }, 3000);
+  };
 
   const addEvent = (event) => {
     setEvents([...events, { ...event, id: Date.now().toString() }]);
+    showNotification("Event baru berhasil ditambahkan!");
   };
 
   const updateEvent = (event) => {
     setEvents(events.map((e) => (e.id === event.id ? event : e)));
     setEditingEvent(null);
+    showNotification("Event berhasil diperbarui!");
   };
 
   const deleteEvent = (id) => {
     setEvents(events.filter((e) => e.id !== id));
+    showNotification("Event telah berhasil dihapus!");
   };
 
   return (
-    <div className="min-h-screen bg-[#f0f7ff]"> 
+    <div className="min-h-screen bg-[#f0f7ff] relative"> 
+      {toast.show && (
+        <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[9999] animate-bounce-in">
+          <div className="bg-white border-l-4 border-green-500 shadow-2xl rounded-xl px-6 py-4 flex items-center gap-4 min-w-[300px]">
+            <CheckCircle2 className="text-green-500 w-6 h-6" />
+            <div>
+              <p className="font-bold text-slate-800">Berhasil!</p>
+              <p className="text-sm text-slate-500">{toast.message}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <AdminHeader />
 
       <div className="max-w-7xl mx-auto py-10 space-y-10">

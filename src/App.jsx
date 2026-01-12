@@ -1,22 +1,21 @@
 import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-// Import Components
 import Navbar from "@/components/public/Navbar";
 import Footer from "@/components/public/Footer";
 
-// Import Pages
 import Home from "./pages/Home";
 import Event from "./pages/Event";
-import Eventdetail from "./pages/Eventdetail"; // Pastikan penulisan huruf besar/kecil sesuai nama file
+import Eventdetail from "./pages/EventDetail";
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/AdminDashboard";
 import DetailAdmin from "./pages/DetailAdmin";
+import CartSidebar from "./components/public/CartSidebar"; 
 
-// Import Assets
 import poster from "./assets/poster.jpg";
 
 function App() {
+  // State untuk data Event utama
   const [events, setEvents] = useState([
     {
       id: "1",
@@ -59,43 +58,73 @@ function App() {
     }
   ]);
 
+  // --- LOGIKA KERANJANG ---
+  const [cartItems, setCartItems] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Fungsi untuk menambah tiket ke keranjang
+  const addToCart = (event) => {
+    const isExist = cartItems.find((item) => item.id === event.id);
+    if (!isExist) {
+      setCartItems([...cartItems, event]);
+    }
+    setIsCartOpen(true); // Buka sidebar otomatis setelah klik beli
+  };
+
   return (
-  <div className="min-h-screen flex flex-col">
-    <Routes>
-      {/* Rute untuk USER (Pakai Navbar & Footer) */}
-      <Route
-        path="/*"
-        element={
-          <>
-            <Navbar />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Home events={events} />} />
-                <Route path="/event" element={<Event events={events} />} />
-                <Route path="/event/:id" element={<Eventdetail events={events} />} />
-                <Route path="/contact" element={<Contact />} />
-              </Routes>
-            </main>
-            <Footer />
-          </>
-        }
+    <div className="min-h-screen flex flex-col">
+      <CartSidebar 
+        isOpen={isCartOpen} 
+        setIsOpen={setIsCartOpen} 
+        cartItems={cartItems} 
+        setCartItems={setCartItems} 
       />
 
-      {/* Rute untuk ADMIN (Tanpa Navbar User) */}
-      <Route 
-        path="/admin" 
-        element={<AdminDashboard events={events} setEvents={setEvents} />} 
-      />
-      <Route 
-        path="/admin/detail/:id" 
-        element={<DetailAdmin events={events} />} 
-      />
+      <Routes>
+        <Route
+          path="/*"
+          element={
+            <>
+              <Navbar />
+              <main className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<Home events={events} />} />
+                  <Route 
+                    path="/event" 
+                    element={
+                      <Event 
+                        events={events} 
+                        addToCart={addToCart} 
+                        setIsCartOpen={setIsCartOpen} 
+                        cartItemsCount={cartItems.length} 
+                      />
+                    } 
+                  />
+                  <Route 
+                    path="/event/:id" 
+                    element={<Eventdetail events={events} addToCart={addToCart} />} 
+                  />
+                  <Route path="/contact" element={<Contact />} />
+                </Routes>
+              </main>
+              <Footer />
+            </>
+          }
+        />
 
-      {/* Fallback jika halaman tidak ditemukan */}
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
-  </div>
-);
+        <Route
+          path="/admin"
+          element={<AdminDashboard events={events} setEvents={setEvents} />}
+        />
+        <Route
+          path="/admin/detail/:id"
+          element={<DetailAdmin events={events} />}
+        />
+
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
