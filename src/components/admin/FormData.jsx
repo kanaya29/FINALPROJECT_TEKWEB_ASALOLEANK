@@ -4,17 +4,18 @@ import { Input } from "../ui/input";
 import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { format } from "date-fns";
-import { CalendarIcon, ImagePlus } from "lucide-react"; 
+import { CalendarIcon, ImagePlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const FormData = ({ onAdd, onEdit, editingEvent }) => {
+const FormData = ({ onAdd, onEdit, onDelete, editingEvent }) => {
   const [form, setForm] = useState({
     name: "",
     date: "",
     price: "",
+    tickets: "",
     location: "",
     description: "",
-    image: "", 
+    image: "",
   });
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const FormData = ({ onAdd, onEdit, editingEvent }) => {
       name: "",
       date: "",
       price: "",
+      tickets: "",
       location: "",
       description: "",
       image: "",
@@ -38,27 +40,52 @@ const FormData = ({ onAdd, onEdit, editingEvent }) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      if (form.image && form.image.startsWith('blob:')) {
-        URL.revokeObjectURL(form.image);
-      }
-      const imageUrl = URL.createObjectURL(file);
-      setForm({ ...form, image: imageUrl });
+    if (!file) return;
+
+    if (form.image && form.image.startsWith("blob:")) {
+      URL.revokeObjectURL(form.image);
     }
+
+    const imageUrl = URL.createObjectURL(file);
+    setForm({ ...form, image: imageUrl });
   };
 
+  // ➕ TAMBAH / ✏️ UPDATE
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (editingEvent) {
       onEdit(form);
+      toast.success("Event berhasil diperbarui");
     } else {
-      onAdd(form);
+      onAdd({
+        ...form,
+        id: Date.now(),
+        soldTicket: 0,
+      });
+      toast.success("Event berhasil ditambahkan");
     }
+
     resetForm();
+    onEdit(null);
+  };
+
+  // 🗑️ HAPUS EVENT
+  const handleDelete = () => {
+    if (!editingEvent) return;
+
+    onDelete(editingEvent.id);
+    toast.error("Event berhasil dihapus");
+
+    resetForm();
+    onEdit(null);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form
+      onSubmit={handleSubmit}
+      className="grid grid-cols-1 md:grid-cols-2 gap-6"
+    >
       <Input
         placeholder="NAMA EVENT"
         value={form.name}
@@ -69,21 +96,25 @@ const FormData = ({ onAdd, onEdit, editingEvent }) => {
       <Popover>
         <PopoverTrigger asChild>
           <Button
-            variant={"outline"}
+            variant="outline"
             className={cn(
               "w-full justify-start text-left font-normal border-slate-200 h-10",
               !form.date && "text-muted-foreground"
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {form.date ? format(new Date(form.date), "PPP") : <span>Pilih Tanggal</span>}
+            {form.date
+              ? format(new Date(form.date), "PPP")
+              : "Pilih Tanggal"}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
             selected={form.date ? new Date(form.date) : undefined}
-            onSelect={(date) => setForm({ ...form, date: date ? date.toISOString() : "" })}
+            onSelect={(date) =>
+              setForm({ ...form, date: date ? date.toISOString() : "" })
+            }
             initialFocus
           />
         </PopoverContent>
@@ -95,17 +126,28 @@ const FormData = ({ onAdd, onEdit, editingEvent }) => {
         onChange={(e) => setForm({ ...form, price: e.target.value })}
       />
 
+      <Input
+        min="0"
+        placeholder="JUMLAH TIKET"
+        value={form.tickets}
+        onChange={(e) =>
+          setForm({ ...form, tickets: Number(e.target.value) })
+        }
+      />
+
       <div className="md:col-span-2 space-y-2">
         <div className="flex items-center gap-2 text-sm font-medium text-slate-600 mb-1">
           <ImagePlus className="w-4 h-4" />
           <span>Poster Event</span>
         </div>
+
         <Input
           type="file"
           accept="image/*"
           onChange={handleFileChange}
           className="cursor-pointer border-dashed border-2 hover:bg-slate-50 transition"
         />
+
         {form.image && (
           <div className="mt-3 relative w-full h-40 group">
             <img
@@ -137,14 +179,28 @@ const FormData = ({ onAdd, onEdit, editingEvent }) => {
 
       <div className="md:col-span-2 flex justify-end gap-3">
         {editingEvent && (
-          <Button 
-            type="button" 
-            variant="ghost" 
-            onClick={() => { resetForm(); onEdit(null); }}
-          >
-            Batal
-          </Button>
+          <>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDelete}
+            >
+              Hapus
+            </Button>
+
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                resetForm();
+                onEdit(null);
+              }}
+            >
+              Batal
+            </Button>
+          </>
         )}
+
         <Button type="submit" className="px-8 bg-blue-600 hover:bg-blue-700">
           {editingEvent ? "Update Event" : "Tambah Event"}
         </Button>

@@ -8,7 +8,6 @@ const AdminHeader = () => {
         <Link 
           to="/" 
           className="p-1 hover:bg-gray-200 rounded-lg transition-colors text-white"
-          title="Kembali ke Website User"
         >
           <Menu size={24} />
         </Link>
