@@ -12,7 +12,6 @@ export default function ProductCard({ event }) {
   const formatRupiah = (number) =>
     new Intl.NumberFormat("id-ID").format(number)
 
-  // LOGIKA STATUS TIKET (OPSI 1)
   let statusLabel = "Tersedia"
   let statusVariant = "default"
 
