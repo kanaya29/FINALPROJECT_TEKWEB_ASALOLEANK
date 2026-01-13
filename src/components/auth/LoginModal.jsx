@@ -61,7 +61,7 @@ export default function LoginModal({ open, setOpen }) {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full  bg-blue-500 text-white">
             Sign in
           </Button>
         </form>

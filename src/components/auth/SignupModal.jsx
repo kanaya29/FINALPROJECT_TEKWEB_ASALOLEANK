@@ -31,11 +31,11 @@ export default function SignupModal({ open, setOpen }) {
 
         {!role && (
           <div className="space-y-3">
-            <Button onClick={() => setRole("public")} className="w-full">
+            <Button onClick={() => setRole("public")} className="w-full bg-blue-500 text-white">
               Daftar sebagai Public
             </Button>
 
-            <Button onClick={() => setRole("admin")} className="w-full">
+            <Button onClick={() => setRole("admin")} className="w-full  bg-blue-500 text-white">
               Daftar sebagai Admin
             </Button>
           </div>
@@ -45,7 +45,7 @@ export default function SignupModal({ open, setOpen }) {
           <div className="space-y-3">
             <Input placeholder="Nama" />
             <Input placeholder="Email" />
-            <Button onClick={handleSubmit} className="w-full">
+            <Button onClick={handleSubmit} className="w-full  bg-blue-500 text-white">
               Daftar
             </Button>
           </div>
