@@ -6,7 +6,7 @@ import Footer from "@/components/public/Footer";
 
 import Home from "./pages/Home";
 import Event from "./pages/Event";
-import Eventdetail from "./pages/EventDetail";
+import Eventdetail from "./pages/Eventdetail";
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/AdminDashboard";
 import DetailAdmin from "./pages/DetailAdmin";
