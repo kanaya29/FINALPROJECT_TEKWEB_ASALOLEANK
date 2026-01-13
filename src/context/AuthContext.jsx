@@ -5,7 +5,6 @@ const AuthContext = createContext()
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
 
-  // Ambil user dari localStorage saat app dibuka
   useEffect(() => {
     const savedUser = localStorage.getItem("user")
     if (savedUser) {

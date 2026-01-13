@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Trash2, ShoppingBag, X, Minus, Plus } from "lucide-react";
 
 export default function CartSidebar({
@@ -6,6 +7,8 @@ export default function CartSidebar({
   cartItems,
   setCartItems,
 }) {
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const formatRupiah = (number) =>
     new Intl.NumberFormat("id-ID").format(number);
 
@@ -25,13 +28,9 @@ export default function CartSidebar({
 
         const currentQty = item.qty || 1;
 
-        if (type === "inc") {
-          return { ...item, qty: currentQty + 1 };
-        }
-
-        if (type === "dec" && currentQty > 1) {
+        if (type === "inc") return { ...item, qty: currentQty + 1 };
+        if (type === "dec" && currentQty > 1)
           return { ...item, qty: currentQty - 1 };
-        }
 
         return item;
       })
@@ -53,12 +52,16 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
 
     const message = `Halo Monggo Ticket, saya ingin memesan tiket berikut:\n\n${itemList}\n\nTotal Pembayaran: Rp ${formatRupiah(
       totalPrice
-    )}\n\nMohon info selanjutnya dan instruksi pembayarannya. Terima kasih 🙏`;
+    )}\n\nMohon info selanjutnya dan instruksi pembayarannya. Terima kasih `;
 
-    const waLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(waLink, "_blank");
+    window.open(
+      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );
+
+    setCartItems([]);
+    setIsOpen(false);
+    setShowConfirm(false);
   };
 
   return (
@@ -76,7 +79,7 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
         onClick={(e) => e.stopPropagation()}
       >
-
+       
         <div className="p-6 border-b flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShoppingBag className="text-blue-600" size={22} />
@@ -99,7 +102,7 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
               return (
                 <div
                   key={item.id}
-                  className="w-full flex gap-4 p-4 bg-white rounded-2xl border shadow-sm"
+                  className="flex gap-4 p-4 bg-white rounded-2xl border shadow-sm"
                 >
                   <img
                     src={item.image}
@@ -107,7 +110,7 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
                     className="w-16 h-16 rounded-xl object-cover"
                   />
 
-                  <div className="flex-grow min-w-0">
+                  <div className="flex-grow">
                     <h4 className="font-bold text-sm line-clamp-1">
                       {item.name}
                     </h4>
@@ -154,7 +157,7 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
             </div>
 
             <button
-              onClick={handleCheckoutWA}
+              onClick={() => setShowConfirm(true)}
               className="w-full h-14 bg-green-500 text-white font-black rounded-2xl"
             >
               Checkout Sekarang (WA)
@@ -162,6 +165,34 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
           </div>
         )}
       </div>
+
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black/50 z-[80] flex items-center justify-center">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm space-y-4">
+            <h3 className="font-black text-lg text-center">
+              Konfirmasi Checkout
+            </h3>
+            <p className="text-sm text-slate-600 text-center">
+              Yakin ingin checkout dan melanjutkan ke WhatsApp?
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="flex-1 h-12 rounded-xl border font-bold"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleCheckoutWA}
+                className="flex-1 h-12 rounded-xl bg-green-500 text-white font-bold"
+              >
+                Ya, Checkout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

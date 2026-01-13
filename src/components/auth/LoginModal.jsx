@@ -18,19 +18,16 @@ export default function LoginModal({ open, setOpen }) {
       return
     }
 
-    // ✅ login via AuthContext
     login({
       name,
       email,
       role: "public",
     })
 
-    // reset state
     setEmail("")
     setName("")
     setError("")
 
-    // tutup modal (feedback sukses implisit)
     setOpen(false)
     
   }

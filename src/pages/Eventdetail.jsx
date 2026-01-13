@@ -3,10 +3,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import calendar from "@/assets/icon_calendar.svg";
 import { ShoppingCart } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Eventdetail({ events, addToCart }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
 
   const event = events.find((e) => e.id.toString() === id.toString());
 
@@ -23,6 +25,13 @@ export default function Eventdetail({ events, addToCart }) {
 
   const formatRupiah = (number) =>
     new Intl.NumberFormat("id-ID").format(number);
+
+  const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      navigate("/login"); 
+    }
+    addToCart(event);
+  };
 
   return (
     <div className="pt-32 pb-20 px-6 bg-slate-100 min-h-screen flex justify-center">
@@ -42,14 +51,7 @@ export default function Eventdetail({ events, addToCart }) {
               <img
                 src={event.image}
                 alt={event.name}
-                className="
-                  w-full max-w-[380px]
-                  aspect-[3/4]
-                  object-cover
-                  rounded-3xl
-                  shadow-2xl
-                  border
-                "
+                className="w-full max-w-[380px] aspect-[3/4] object-cover rounded-3xl shadow-2xl border"
               />
             </div>
 
@@ -80,7 +82,7 @@ export default function Eventdetail({ events, addToCart }) {
                   Deskripsi
                 </p>
                 <p className="text-slate-600 leading-relaxed">
-                  {event.description}
+                  {event.detail}
                 </p>
               </div>
 
@@ -93,20 +95,28 @@ export default function Eventdetail({ events, addToCart }) {
                 </p>
 
                 <Button
-                  onClick={() => addToCart(event)}
-                  className="
-                    w-full h-16
-                    text-xl font-black
-                    bg-blue-600 hover:bg-blue-700
-                    rounded-2xl
-                    shadow-xl shadow-blue-200
-                    flex items-center justify-center gap-3
-                    transition-all active:scale-[0.97]
-                  "
+                  onClick={handleAddToCart}
+                  className={`
+                    w-full h-16 text-xl font-black rounded-2xl
+                    flex items-center justify-center gap-3 transition-all
+                    ${
+                      isAuthenticated
+                        ? "bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-200 active:scale-[0.97]"
+                        : "bg-gray-400 cursor-not-allowed"
+                    }
+                  `}
                 >
                   <ShoppingCart size={24} />
-                  Masukkan Keranjang
+                  {isAuthenticated
+                    ? "Masukkan Keranjang"
+                    : "Login untuk membeli tiket"}
                 </Button>
+
+                {!isAuthenticated && (
+                  <p className="text-center mt-3 text-sm text-red-500 font-semibold">
+                    Kamu harus login atau daftar terlebih dahulu
+                  </p>
+                )}
 
                 <p className="text-center mt-4 text-[10px] text-slate-300 font-bold uppercase tracking-widest">
                   Official Ticket • Secure Transaction
