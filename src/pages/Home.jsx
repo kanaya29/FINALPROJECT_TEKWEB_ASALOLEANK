@@ -14,8 +14,7 @@ export default function Home({ events = [] }) {
     >
       <section className="relative bg-blue-600/10 py-20 px-6 pt-32 mb-10 backdrop-blur-md border-b border-blue-100">
         <div className="max-w-6xl mx-auto flex flex-col items-center gap-12 md:flex-row-reverse">
-
-          {/* Ilustrasi Hero */}
+          
           <div className="w-full md:w-1/2 flex justify-center">
             <div className="relative">
               <div className="absolute inset-0 bg-blue-400 blur-[80px] opacity-20 rounded-full"></div>
@@ -27,7 +26,6 @@ export default function Home({ events = [] }) {
             </div>
           </div>
 
-          {/* Teks Hero - SEARCH BAR SUDAH DIHAPUS */}
           <div className="w-full md:w-1/2 text-center md:text-left">
             <h1 className="text-4xl md:text-6xl font-black text-blue-900 mb-4 leading-[1.1] tracking-tight">
               CARI, TEMUKAN, <br />
@@ -42,20 +40,16 @@ export default function Home({ events = [] }) {
         </div>
       </section>
 
-      {/* JUDUL */}
-      <div className="mt-16 mb-12">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-            Event Terbaru
-          </h2>
-          <p className="text-slate-600 mt-2 font-medium">
-            Jelajahi konser dan festival musik seru di Yogyakarta
-          </p>
-          <div className="h-1 w-20 bg-blue-600 mx-auto mt-4 rounded-full"></div>
-        </div>
+      <div className="mt-16 mb-12 text-center">
+        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+          Event Terbaru
+        </h2>
+        <p className="text-slate-600 mt-2 font-medium">
+          Jelajahi konser dan festival musik seru di Yogyakarta
+        </p>
+        <div className="h-1 w-20 bg-blue-600 mx-auto mt-4 rounded-full"></div>
       </div>
 
-      {/* CARD EVENT */}
       <div className="py-2 px-10 grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         {events.length === 0 ? (
           <p className="col-span-3 text-center text-slate-600 font-medium py-10">
@@ -68,7 +62,6 @@ export default function Home({ events = [] }) {
         )}
       </div>
 
-      {/* INFORMASI */}
       <section className="py-24 bg-white/85 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -84,11 +77,11 @@ export default function Home({ events = [] }) {
             {[
               {
                 q: "Bagaimana cara mendapatkan tiketnya?",
-                a: "Cukup pilih event favoritmu, klik tombol beli, dan kamu akan terhubung langsung dengan admin WhatsApp kami untuk proses pembayaran kilat."
+                a: "Cukup pilih event favoritmu, klik tombol beli, dan kamu akan terhubung langsung dengan admin WhatsApp kami untuk proses pembayaran kilat.",
               },
               {
                 q: "Apakah tiket yang dijual resmi?",
-                a: "100% Resmi. Kami bekerja sama langsung dengan promotor dan penyelenggara event."
+                a: "100% Resmi. Kami bekerja sama langsung dengan promotor dan penyelenggara event.",
               },
             ].map((item, index) => (
               <details
@@ -108,17 +101,14 @@ export default function Home({ events = [] }) {
         </div>
       </section>
 
-      {/* TAGS AREA */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="mb-10">
-            <h2 className="text-3xl font-extrabold text-slate-900">
-              Lagi Ramai di Jogja 🎶
-            </h2>
-            <p className="text-slate-600 mt-2 font-medium">
-              Beberapa lokasi dan jenis konser yang sering dipilih penonton
-            </p>
-          </div>
+          <h2 className="text-3xl font-extrabold text-slate-900 mb-2">
+            Lagi Ramai di Jogja 🎶
+          </h2>
+          <p className="text-slate-600 mb-6 font-medium">
+            Beberapa lokasi dan jenis konser yang sering dipilih penonton
+          </p>
 
           <div className="flex flex-wrap gap-4">
             {[
@@ -132,8 +122,8 @@ export default function Home({ events = [] }) {
               <div
                 key={index}
                 className="px-5 py-3 bg-white/80 backdrop-blur rounded-full
-                     shadow-sm hover:shadow-md transition cursor-pointer
-                     font-semibold text-slate-800 border border-slate-100"
+                shadow-sm hover:shadow-md transition cursor-pointer
+                font-semibold text-slate-800 border border-slate-100"
               >
                 {item}
               </div>

@@ -9,7 +9,6 @@ export default function CartSidebar({
   const formatRupiah = (number) =>
     new Intl.NumberFormat("id-ID").format(number);
 
-  // TOTAL AMAN (ANTI NaN)
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.price * (item.qty || 1),
     0
@@ -64,7 +63,6 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
 
   return (
     <>
-      {/* Overlay */}
       <div
         className={`fixed inset-0 bg-black/50 z-[60] transition-opacity ${
           isOpen ? "opacity-100 visible" : "opacity-0 invisible"
@@ -72,14 +70,13 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
         onClick={() => setIsOpen(false)}
       />
 
-      {/* Sidebar */}
       <div
         className={`fixed right-0 top-0 h-full w-full max-w-md bg-white z-[70]
         shadow-2xl transform transition-transform duration-300 flex flex-col
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+
         <div className="p-6 border-b flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShoppingBag className="text-blue-600" size={22} />
@@ -90,7 +87,6 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
           </button>
         </div>
 
-        {/* Content */}
         <div className="flex-grow overflow-y-auto p-6 space-y-4 bg-slate-50">
           {cartItems.length === 0 ? (
             <p className="text-center text-slate-400">
@@ -119,7 +115,6 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
                       Rp {formatRupiah(item.price)}
                     </p>
 
-                    {/* QTY CONTROLLER */}
                     <div className="flex items-center gap-3 mt-2">
                       <button
                         onClick={() => updateQty(item.id, "dec")}
@@ -151,7 +146,6 @@ Subtotal: Rp ${formatRupiah(item.price * qty)}`;
           )}
         </div>
 
-        {/* Footer */}
         {cartItems.length > 0 && (
           <div className="p-6 border-t bg-white space-y-4">
             <div className="flex justify-between font-bold">

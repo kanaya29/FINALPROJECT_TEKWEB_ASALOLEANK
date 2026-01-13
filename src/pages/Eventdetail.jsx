@@ -29,7 +29,6 @@ export default function Eventdetail({ events, addToCart }) {
       <Card className="max-w-6xl w-full rounded-[2.5rem] shadow-2xl border-none bg-white">
         <CardContent className="p-8 md:p-12">
 
-          {/* BACK */}
           <button
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-slate-400 hover:text-blue-600 font-bold mb-6"
@@ -37,10 +36,8 @@ export default function Eventdetail({ events, addToCart }) {
             ← <span className="uppercase tracking-widest text-sm">Kembali</span>
           </button>
 
-          {/* MAIN CONTENT */}
           <div className="grid lg:grid-cols-[420px_1fr] gap-12 items-start">
 
-            {/* POSTER */}
             <div className="flex justify-center">
               <img
                 src={event.image}
@@ -56,10 +53,8 @@ export default function Eventdetail({ events, addToCart }) {
               />
             </div>
 
-            {/* INFO */}
             <div className="flex flex-col h-full">
 
-              {/* TITLE */}
               <div className="mb-6">
                 <h1 className="text-4xl font-extrabold text-slate-900 leading-tight mb-3">
                   {event.name}
@@ -71,7 +66,6 @@ export default function Eventdetail({ events, addToCart }) {
                 </div>
               </div>
 
-              {/* LOCATION */}
               <div className="bg-slate-50 p-5 rounded-2xl border mb-6">
                 <p className="text-[10px] uppercase font-bold text-slate-400 mb-1">
                   Lokasi Utama
@@ -81,7 +75,6 @@ export default function Eventdetail({ events, addToCart }) {
                 </p>
               </div>
 
-              {/* DESCRIPTION */}
               <div className="mb-8">
                 <p className="text-[10px] uppercase font-bold text-slate-400 mb-2">
                   Deskripsi
@@ -91,7 +84,6 @@ export default function Eventdetail({ events, addToCart }) {
                 </p>
               </div>
 
-              {/* PRICE & CTA */}
               <div className="mt-auto pt-6 border-t">
                 <p className="text-[10px] uppercase font-bold text-slate-400 mb-1">
                   Harga Tiket
