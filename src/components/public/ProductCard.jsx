@@ -2,127 +2,95 @@ import { Link } from "react-router-dom"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import calendar from "@/assets/icon_calendar.svg"
+import { format } from "date-fns"
+import { id as localeID } from "date-fns/locale"
 
 export default function ProductCard({ event }) {
-  const remainingTicket = Math.max(
-    event.totalTicket - event.soldTicket,
-    0
-  )
+  // 1. Logika Perhitungan Stok (Ditambah '|| 0' untuk keamanan data)
+  const soldCount = event.soldTicket || 0; 
+  const totalCount = event.totalTicket || 0;
+  
+  const remainingTicket = Math.max(totalCount - soldCount, 0);
+  const isSoldOut = remainingTicket <= 0;
+  
+  const soldPercentage = totalCount > 0 
+    ? (soldCount / totalCount) * 100 
+    : 0;
 
-  const soldPercentage =
-    event.totalTicket > 0
-      ? (event.soldTicket / event.totalTicket) * 100
-      : 0
+  const formatRupiah = (number) => new Intl.NumberFormat("id-ID").format(number);
 
-  const formatRupiah = (number) =>
-    new Intl.NumberFormat("id-ID").format(number)
+  // 2. Tentukan Label Status
+  let statusLabel = "Tersedia";
+  let statusVariant = "default";
 
-  let statusLabel = "Tersedia"
-  let statusVariant = "default"
-
-  if (remainingTicket === 0) {
-    statusLabel = "Habis"
-    statusVariant = "destructive"
+  if (isSoldOut) {
+    statusLabel = "Habis Terjual"; 
+    statusVariant = "destructive";
   } else if (remainingTicket < 50) {
-    statusLabel = "Hampir Habis"
-    statusVariant = "outline"
+    statusLabel = "Hampir Habis";
+    statusVariant = "outline";
   }
 
   return (
-    <Link to={`/event/${event.id}`} className="h-full">
+    // Link dimatikan jika stok habis agar pengunjung tidak masuk ke detail
+    <Link to={`/event/${event.id}`} className={`h-full ${isSoldOut ? "pointer-events-none" : ""}`}>
       <Card
-        className="
-          relative h-full min-h-[280px]
-          bg-gray-100 border border-gray-300
-          cursor-pointer transition
-          hover:scale-105
-        "
+        className={`
+          relative h-full min-h-[280px] transition duration-300
+          border border-gray-300 shadow-sm
+          ${isSoldOut ? "bg-gray-200 grayscale opacity-80" : "bg-gray-100 hover:scale-105 cursor-pointer"}
+        `}
       >
+        {/* OVERLAY TULISAN HABIS */}
+        {isSoldOut && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+            <div className="bg-red-600 text-white font-black px-6 py-2 rounded-lg rotate-[-15deg] shadow-2xl border-4 border-white text-xl uppercase tracking-widest">
+              Sold Out
+            </div>
+          </div>
+        )}
+
         <CardContent className="p-4 flex flex-col justify-between h-full">
-          
           <div className="flex gap-4">
-            <img
-              src={event.image}
-              alt={event.name}
-              className="
-                w-24 h-36 rounded-xl object-cover flex-shrink-0 shadow-sm
-              "
-            />
+            <img src={event.image} alt={event.name} className="w-24 h-36 rounded-xl object-cover flex-shrink-0 shadow-sm" />
 
             <div className="flex flex-col gap-1 w-full min-w-0">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="text-lg font-bold leading-tight text-slate-800 line-clamp-2">
-                  {event.name}
-                </h3>
-
-                <Badge
-                  variant={statusVariant}
-                  className={`shrink-0 text-[10px] px-2 py-0.5 whitespace-nowrap
-                    ${
-                      statusLabel === "Hampir Habis"
-                        ? "bg-white text-black border"
-                        : ""
-                    }
-                  `}
-                >
+                <h3 className="text-lg font-bold leading-tight text-slate-800 line-clamp-2">{event.name}</h3>
+                <Badge variant={statusVariant} className="shrink-0 text-[10px] px-2 py-0.5 whitespace-nowrap">
                   {statusLabel}
                 </Badge>
               </div>
 
               <div className="flex items-center gap-2 mt-1">
-                <img
-                  src={calendar}
-                  alt="calendar"
-                  className="w-4 h-4 opacity-70"
-                />
+                <img src={calendar} alt="calendar" className="w-4 h-4 opacity-70" />
                 <p className="text-sm text-slate-500 font-medium">
-                  {event.date}
+                  {/* Format tanggal Indonesia */}
+                  {event.date ? format(new Date(event.date), "dd MMMM yyyy", { locale: localeID }) : "TBA"}
                 </p>
               </div>
 
-              <p className="text-sm text-slate-600 font-medium">
-                📍 {event.location}
-              </p>
-
-              <p className="text-sm text-slate-400 line-clamp-2 mt-1">
-                {event.description}
-              </p>
-
-              <p className="font-bold text-blue-600 text-lg mt-1">
-                Rp {formatRupiah(event.price)}
-              </p>
+              <p className="text-sm text-slate-600 font-medium">📍 {event.location}</p>
+              <p className="font-bold text-blue-600 text-lg mt-1">Rp {formatRupiah(event.price)}</p>
             </div>
           </div>
 
+          {/* Progress Bar Ketersediaan */}
           <div className="mt-4 space-y-2 bg-white p-3 rounded-xl border border-slate-100 shadow-inner">
             <div className="flex justify-between text-[10px] font-bold uppercase text-slate-500">
               <span>Ketersediaan</span>
-              <span
-                className={
-                  remainingTicket < 50
-                    ? "text-orange-600"
-                    : "text-green-600"
-                }
-              >
-                {remainingTicket} Tiket Sisa
+              <span className={isSoldOut ? "text-red-600" : remainingTicket < 50 ? "text-orange-600" : "text-green-600"}>
+                {isSoldOut ? "Stok Habis" : `${remainingTicket} Tiket Sisa`}
               </span>
             </div>
 
             <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
               <div
-                className={`h-full transition-all duration-500 ${
-                  soldPercentage > 80 ? "bg-red-500" : "bg-blue-500"
-                }`}
+                className={`h-full transition-all duration-500 ${isSoldOut ? "bg-red-600" : soldPercentage > 80 ? "bg-orange-500" : "bg-blue-500"}`}
                 style={{ width: `${soldPercentage}%` }}
               />
             </div>
-
-            <div className="flex justify-between text-[10px] text-slate-400 font-medium uppercase">
-              <span>Terjual: {event.soldTicket}</span>
-              <span>Total: {event.totalTicket}</span>
-            </div>
           </div>
-
         </CardContent>
       </Card>
     </Link>

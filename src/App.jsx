@@ -1,74 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+// Gunakan onSnapshot agar data di Katalog otomatis hilang jika dihapus di Admin
+import { collection, onSnapshot } from "firebase/firestore"; 
+import { db } from "./firebase";
 
 import Navbar from "@/components/public/Navbar";
 import Footer from "@/components/public/Footer";
-
 import Home from "./pages/Home";
 import Event from "./pages/Event";
-import Eventdetail from "./pages/EventDetail";
+import EventDetail from "./pages/EventDetail"; 
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/AdminDashboard";
 import DetailAdmin from "./pages/DetailAdmin";
 import CartSidebar from "./components/public/CartSidebar"; 
-
-import poster from "./assets/poster.jpg";
+import TestConnection from "./TestConnection"; 
 
 function App() {
-  // State untuk data Event utama
-  const [events, setEvents] = useState([
-    {
-      id: "1",
-      name: "Jazz Gunung 2025",
-      category: "Music",
-      date: "08-12-2025",
-      price: 750000,
-      location: "nawang jagad",
-      description: "Konser jazz etnik di ketinggian 2000mdpl",
-      detail: "konser ini diselenggarakan dengan asik dan memberi kesan tak terlupakan",
-      image: poster,
-      totalTicket: 1000,
-      soldTicket: 999
-    },
-    {
-      id: "2",
-      name: "Perunggu festival 2025",
-      category: "Music",
-      date: "20-12-2025",
-      price: 350000,
-      location: "UAD YOGYAKARTA",
-      description: "Konser jazz etnik di ketinggian 2000mdpl",
-      detail: "konser ini diselenggarakan dengan asik dan memberi kesan tak terlupakan",
-      image: poster,
-      totalTicket: 1000,
-      soldTicket: 740
-    },
-    {
-      id: "3",
-      name: "HUT Kridosono 2025",
-      category: "Technology",
-      date: "20-12-2025",
-      price: 350000,
-      location: "lapangan kridosono",
-      description: "Konser jazz etnik di ketinggian 2000mdpl",
-      detail: "konser ini diselenggarakan dengan asik dan memberi kesan tak terlupakan",
-      image: poster,
-      totalTicket: 1000,
-      soldTicket: 740
-    }
-  ]);
-
-  // --- LOGIKA KERANJANG ---
+  const [events, setEvents] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Fungsi untuk menambah tiket ke keranjang
+  // LISTENER REAL-TIME
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "tickets"), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setEvents(data); // Update otomatis seluruh halaman (Home, Event, Admin)
+    });
+
+    return () => unsub(); // Mematikan pantauan saat aplikasi ditutup
+  }, []);
+
   const addToCart = (event) => {
     const isExist = cartItems.find((item) => item.id === event.id);
     if (!isExist) {
       setCartItems([...cartItems, event]);
     }
-    setIsCartOpen(true); // Buka sidebar otomatis setelah klik beli
+    setIsCartOpen(true); 
   };
 
   return (
@@ -80,6 +50,10 @@ function App() {
         setCartItems={setCartItems} 
       />
 
+      <div className="bg-yellow-50 py-2 border-b">
+        <TestConnection />
+      </div>
+
       <Routes>
         <Route
           path="/*"
@@ -88,6 +62,7 @@ function App() {
               <Navbar />
               <main className="flex-grow">
                 <Routes>
+                  {/* Semua halaman menerima data 'events' yang sama */}
                   <Route path="/" element={<Home events={events} />} />
                   <Route 
                     path="/event" 
@@ -102,7 +77,7 @@ function App() {
                   />
                   <Route 
                     path="/event/:id" 
-                    element={<Eventdetail events={events} addToCart={addToCart} />} 
+                    element={<EventDetail events={events} addToCart={addToCart} />} 
                   />
                   <Route path="/contact" element={<Contact />} />
                 </Routes>
@@ -112,9 +87,10 @@ function App() {
           }
         />
 
+        {/* Kirim events ke AdminDashboard tanpa membuat state baru */}
         <Route
           path="/admin"
-          element={<AdminDashboard events={events} setEvents={setEvents} />}
+          element={<AdminDashboard events={events} />}
         />
         <Route
           path="/admin/detail/:id"
