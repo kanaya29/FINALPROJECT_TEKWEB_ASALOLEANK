@@ -8,7 +8,7 @@ import Navbar from "@/components/public/Navbar";
 import Footer from "@/components/public/Footer";
 import Home from "./pages/Home";
 import Event from "./pages/Event";
-import EventDetail from "./pages/EventDetail"; 
+import EventDetail from "./pages/Eventdetail"; 
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/AdminDashboard";
 import DetailAdmin from "./pages/DetailAdmin";
