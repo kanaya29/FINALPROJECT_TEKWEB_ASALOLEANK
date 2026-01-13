@@ -8,7 +8,7 @@ import Navbar from "@/components/public/Navbar";
 import Footer from "@/components/public/Footer";
 import Home from "./pages/Home";
 import Event from "./pages/Event";
-import EventDetail from "./pages/Eventdetail"; 
+import Eventdetail from "./pages/Eventdetail"; 
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/AdminDashboard";
 import DetailAdmin from "./pages/DetailAdmin";
@@ -77,7 +77,7 @@ function App() {
                   />
                   <Route 
                     path="/event/:id" 
-                    element={<EventDetail events={events} addToCart={addToCart} />} 
+                    element={<Eventdetail events={events} addToCart={addToCart} />} 
                   />
                   <Route path="/contact" element={<Contact />} />
                 </Routes>
