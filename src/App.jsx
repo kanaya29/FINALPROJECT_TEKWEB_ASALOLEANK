@@ -1,22 +1,21 @@
-import { useState } from "react"
-import { Routes, Route, Navigate } from "react-router-dom"
+import { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import Navbar from "@/components/public/Navbar"
-import Footer from "@/components/public/Footer"
-import CartSidebar from "@/components/public/CartSidebar"
+import Navbar from "@/components/public/Navbar";
+import Footer from "@/components/public/Footer";
+import CartSidebar from "@/components/public/CartSidebar";
 
-import Home from "./pages/Home"
-import Event from "./pages/Event"
-import Eventdetail from "./pages/Eventdetail"
-import Contact from "./pages/Contact"
-import AdminDashboard from "./pages/AdminDashboard"
-import DetailAdmin from "./pages/DetailAdmin"
-import NotFound from "./pages/NotFound"
+import Home from "./pages/Home";
+import Event from "./pages/Event";
+import Eventdetail from "./pages/Eventdetail";
+import Contact from "./pages/Contact";
+import AdminDashboard from "./pages/AdminDashboard";
+import DetailAdmin from "./pages/DetailAdmin";
+import NotFound from "./pages/NotFound";
 
-import poster from "./assets/poster.jpg"
+import poster from "./assets/poster.jpg";
 
 function App() {
-
   const [events, setEvents] = useState([
     {
       id: "1",
@@ -29,7 +28,7 @@ function App() {
       detail: "Konser dengan suasana alam pegunungan",
       image: poster,
       totalTicket: 1000,
-      soldTicket: 999
+      soldTicket: 999,
     },
     {
       id: "2",
@@ -42,7 +41,7 @@ function App() {
       detail: "Menampilkan musisi nasional",
       image: poster,
       totalTicket: 1000,
-      soldTicket: 740
+      soldTicket: 740,
     },
     {
       id: "3",
@@ -55,20 +54,20 @@ function App() {
       detail: "Hiburan dangdut meriah",
       image: poster,
       totalTicket: 1000,
-      soldTicket: 740
-    }
-  ])
+      soldTicket: 740,
+    },
+  ]);
 
-  const [cartItems, setCartItems] = useState([])
-  const [isCartOpen, setIsCartOpen] = useState(false)
+  const [cartItems, setCartItems] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const addToCart = (event) => {
-    const exist = cartItems.find((item) => item.id === event.id)
+    const exist = cartItems.find((item) => item.id === event.id);
     if (!exist) {
-      setCartItems([...cartItems, event])
+      setCartItems([...cartItems, event]);
     }
-    setIsCartOpen(true)
-  }
+    setIsCartOpen(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -83,7 +82,6 @@ function App() {
 
       <main className="flex-grow">
         <Routes>
- 
           <Route path="/" element={<Home events={events} />} />
           <Route
             path="/event"
@@ -117,7 +115,7 @@ function App() {
 
       <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
