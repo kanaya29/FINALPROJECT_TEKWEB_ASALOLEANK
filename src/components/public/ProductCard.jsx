@@ -6,33 +6,30 @@ import { format } from "date-fns"
 import { id as localeID } from "date-fns/locale"
 
 export default function ProductCard({ event }) {
-  // 1. Logika Perhitungan Stok (Ditambah '|| 0' untuk keamanan data)
-  const soldCount = event.soldTicket || 0; 
-  const totalCount = event.totalTicket || 0;
+  const soldCount = event.soldTicket || 0
+  const totalCount = event.totalTicket || 0
   
-  const remainingTicket = Math.max(totalCount - soldCount, 0);
-  const isSoldOut = remainingTicket <= 0;
+  const remainingTicket = Math.max(totalCount - soldCount, 0)
+  const isSoldOut = remainingTicket <= 0
   
   const soldPercentage = totalCount > 0 
     ? (soldCount / totalCount) * 100 
-    : 0;
+    : 0
 
-  const formatRupiah = (number) => new Intl.NumberFormat("id-ID").format(number);
+  const formatRupiah = (number) => new Intl.NumberFormat("id-ID").format(number)
 
-  // 2. Tentukan Label Status
-  let statusLabel = "Tersedia";
-  let statusVariant = "default";
+  let statusLabel = "Tersedia"
+  let statusVariant = "default"
 
   if (isSoldOut) {
-    statusLabel = "Habis Terjual"; 
-    statusVariant = "destructive";
+    statusLabel = "Habis Terjual"
+    statusVariant = "destructive"
   } else if (remainingTicket < 50) {
-    statusLabel = "Hampir Habis";
-    statusVariant = "outline";
+    statusLabel = "Hampir Habis"
+    statusVariant = "outline"
   }
 
   return (
-    // Link dimatikan jika stok habis agar pengunjung tidak masuk ke detail
     <Link to={`/event/${event.id}`} className={`h-full ${isSoldOut ? "pointer-events-none" : ""}`}>
       <Card
         className={`
@@ -41,7 +38,6 @@ export default function ProductCard({ event }) {
           ${isSoldOut ? "bg-gray-200 grayscale opacity-80" : "bg-gray-100 hover:scale-105 cursor-pointer"}
         `}
       >
-        {/* OVERLAY TULISAN HABIS */}
         {isSoldOut && (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
             <div className="bg-red-600 text-white font-black px-6 py-2 rounded-lg rotate-[-15deg] shadow-2xl border-4 border-white text-xl uppercase tracking-widest">
@@ -65,7 +61,6 @@ export default function ProductCard({ event }) {
               <div className="flex items-center gap-2 mt-1">
                 <img src={calendar} alt="calendar" className="w-4 h-4 opacity-70" />
                 <p className="text-sm text-slate-500 font-medium">
-                  {/* Format tanggal Indonesia */}
                   {event.date ? format(new Date(event.date), "dd MMMM yyyy", { locale: localeID }) : "TBA"}
                 </p>
               </div>
@@ -75,7 +70,6 @@ export default function ProductCard({ event }) {
             </div>
           </div>
 
-          {/* Progress Bar Ketersediaan */}
           <div className="mt-4 space-y-2 bg-white p-3 rounded-xl border border-slate-100 shadow-inner">
             <div className="flex justify-between text-[10px] font-bold uppercase text-slate-500">
               <span>Ketersediaan</span>

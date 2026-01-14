@@ -47,14 +47,12 @@ export default function CartSidebar({
     );
   };
 
-  // 🔥 CHECKOUT + UPDATE STOK + WA
   const handleCheckoutWA = async () => {
     if (!isAuthenticated || cartItems.length === 0) return;
 
     setIsProcessing(true);
 
     try {
-      // 1️⃣ Atomic update stok
       const updates = cartItems.map((item) => {
         const ref = doc(db, "tickets", item.id);
         return updateDoc(ref, {
@@ -64,7 +62,6 @@ export default function CartSidebar({
 
       await Promise.all(updates);
 
-      // 2️⃣ Format pesan WA
       const phoneNumber = "6289517793305";
 
       const itemList = cartItems
@@ -86,13 +83,11 @@ ${itemList}
 Mohon info instruksi pembayaran.
 Terima kasih 🙏`;
 
-      // 3️⃣ Open WhatsApp
       window.open(
         `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
         "_blank"
       );
 
-      // 4️⃣ Cleanup
       setCartItems([]);
       setIsOpen(false);
       setShowConfirm(false);
@@ -106,7 +101,6 @@ Terima kasih 🙏`;
 
   return (
     <>
-      {/* Overlay */}
       <div
         className={`fixed inset-0 bg-black/50 z-[60] transition-opacity ${
           isOpen ? "opacity-100 visible" : "opacity-0 invisible"
@@ -114,13 +108,11 @@ Terima kasih 🙏`;
         onClick={() => setIsOpen(false)}
       />
 
-      {/* Sidebar */}
       <div
         className={`fixed right-0 top-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl transform transition-transform duration-300 flex flex-col ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* Header */}
         <div className="p-6 border-b flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShoppingBag className="text-blue-600" size={22} />
@@ -131,7 +123,6 @@ Terima kasih 🙏`;
           </button>
         </div>
 
-        {/* Items */}
         <div className="flex-grow overflow-y-auto p-6 space-y-4 bg-slate-50">
           {cartItems.length === 0 ? (
             <div className="text-center py-20">
@@ -192,7 +183,6 @@ Terima kasih 🙏`;
           )}
         </div>
 
-        {/* Footer */}
         {cartItems.length > 0 && (
           <div className="p-6 border-t space-y-4">
             <div className="flex justify-between font-black">
@@ -216,7 +206,6 @@ Terima kasih 🙏`;
         )}
       </div>
 
-      {/* Confirm Modal */}
       {showConfirm && (
         <div className="fixed inset-0 bg-black/60 z-[80] flex items-center justify-center p-6">
           <div className="bg-white rounded-3xl p-8 w-full max-w-sm text-center space-y-6">

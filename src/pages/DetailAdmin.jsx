@@ -36,7 +36,6 @@ const DetailAdmin = ({ events }) => {
       <div className="bg-white border border-slate-200 rounded-2xl p-10 shadow-sm">
         <div className="flex justify-between items-start border-b pb-8">
           <div>
-            {/* Bagian Badge Category sudah dihapus di sini */}
             <h1 className="text-4xl font-black text-slate-900 leading-tight">
               {event.name}
             </h1>

@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { LayoutDashboard, PlusCircle, ListTodo, CheckCircle2 } from "lucide-react";
-import { db } from "../firebase"; 
+import { db } from "../firebase";
 import { collection, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 
 import AdminHeader from "../components/admin/AdminHeader";
 import FormData from "../components/admin/FormData";
 import DataTable from "../components/admin/DataTable";
-import poster from "../assets/poster.jpg"; 
+import poster from "../assets/poster.jpg";
 
-// Data 'events' diambil dari props App.jsx
 const AdminDashboard = ({ events }) => {
   const [editingEvent, setEditingEvent] = useState(null);
   const [toast, setToast] = useState({ show: false, message: "" });
@@ -18,7 +17,6 @@ const AdminDashboard = ({ events }) => {
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
-  // ➕ CREATE: Simpan ke Firestore
   const addEvent = async (formData) => {
     try {
       const newTicket = {
@@ -39,7 +37,6 @@ const AdminDashboard = ({ events }) => {
     }
   };
 
-  // ✏️ UPDATE: Simpan perubahan ke Firestore
   const updateEvent = async (formData) => {
     try {
       const eventRef = doc(db, "tickets", formData.id);
@@ -48,7 +45,7 @@ const AdminDashboard = ({ events }) => {
         date: formData.date,
         price: Number(formData.price),
         totalTicket: Number(formData.tickets),
-        soldTicket: Number(formData.soldTicket), // Simpan hasil koreksi manual
+        soldTicket: Number(formData.soldTicket),
         location: formData.location,
         description: formData.description,
         image: formData.image
@@ -61,7 +58,6 @@ const AdminDashboard = ({ events }) => {
     }
   };
 
-  // 🗑️ DELETE: Hapus permanen
   const deleteEvent = async (id) => {
     if (window.confirm("Hapus event ini? Data di katalog akan langsung hilang secara real-time.")) {
       try {
@@ -74,7 +70,7 @@ const AdminDashboard = ({ events }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f0f7ff] relative"> 
+    <div className="min-h-screen bg-[#f0f7ff] relative">
       {toast.show && (
         <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[9999] animate-bounce">
           <div className="bg-white border-l-4 border-green-500 shadow-2xl rounded-xl px-6 py-4 flex items-center gap-4 min-w-[300px]">
@@ -100,31 +96,54 @@ const AdminDashboard = ({ events }) => {
               Data yang kamu kelola di sini terhubung secara real-time ke halaman katalog.
             </p>
           </div>
-          <img src={poster} alt="decoration" className="w-48 h-48 object-cover rounded-2xl rotate-12 absolute -right-8 -bottom-8 opacity-30 blur-[1px]" />
+          <img
+            src={poster}
+            alt="decoration"
+            className="w-48 h-48 object-cover rounded-2xl rotate-12 absolute -right-8 -bottom-8 opacity-30 blur-[1px]"
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           <section className="lg:col-span-5 bg-white p-8 rounded-3xl shadow-sm border border-blue-50/50">
             <div className="flex items-center gap-3 mb-8">
-              <div className="p-3 bg-blue-100 rounded-2xl"><PlusCircle className="w-6 h-6 text-blue-600" /></div>
+              <div className="p-3 bg-blue-100 rounded-2xl">
+                <PlusCircle className="w-6 h-6 text-blue-600" />
+              </div>
               <div>
-                <h2 className="text-xl font-bold text-slate-800">{editingEvent ? "Edit Tiket" : "Buat Tiket Baru"}</h2>
-                <p className="text-sm text-slate-400">Atur harga dan stok terjual secara manual di sini</p>
+                <h2 className="text-xl font-bold text-slate-800">
+                  {editingEvent ? "Edit Tiket" : "Buat Tiket Baru"}
+                </h2>
+                <p className="text-sm text-slate-400">
+                  Atur harga dan stok terjual secara manual di sini
+                </p>
               </div>
             </div>
-            <FormData onAdd={addEvent} onEdit={updateEvent} editingEvent={editingEvent} setEditingEvent={setEditingEvent} />
+            <FormData
+              onAdd={addEvent}
+              onEdit={updateEvent}
+              editingEvent={editingEvent}
+              setEditingEvent={setEditingEvent}
+            />
           </section>
 
           <section className="lg:col-span-7 bg-white p-8 rounded-3xl shadow-sm border border-blue-50/50">
             <div className="flex items-center gap-3 mb-8">
-              <div className="p-3 bg-green-100 rounded-2xl"><ListTodo className="w-6 h-6 text-green-600" /></div>
+              <div className="p-3 bg-green-100 rounded-2xl">
+                <ListTodo className="w-6 h-6 text-green-600" />
+              </div>
               <div>
                 <h2 className="text-xl font-bold text-slate-800">Daftar Tiket Aktif</h2>
-                <p className="text-sm text-slate-400">Menampilkan {events.length} event secara real-time</p>
+                <p className="text-sm text-slate-400">
+                  Menampilkan {events.length} event secara real-time
+                </p>
               </div>
             </div>
             <div className="rounded-2xl border border-slate-100 overflow-hidden">
-              <DataTable data={events} onEdit={setEditingEvent} onDelete={deleteEvent} />
+              <DataTable
+                data={events}
+                onEdit={setEditingEvent}
+                onDelete={deleteEvent}
+              />
             </div>
           </section>
         </div>

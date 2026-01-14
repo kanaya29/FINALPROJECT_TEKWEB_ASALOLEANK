@@ -22,7 +22,6 @@ export default function Eventdetail({ events = [], addToCart }) {
     (e) => e.id?.toString() === id?.toString()
   );
 
-  // Format tanggal → DD-MM-YYYY
   const formatDate = (dateString) => {
     if (!dateString) return "Segera Hadir";
     const date = new Date(dateString);
@@ -35,7 +34,6 @@ export default function Eventdetail({ events = [], addToCart }) {
     return `${day}-${month}-${year}`;
   };
 
-  // Event tidak ditemukan
   if (!isLoading && !event) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-white p-6">
@@ -53,7 +51,6 @@ export default function Eventdetail({ events = [], addToCart }) {
     );
   }
 
-  // Skeleton loading
   if (isLoading) {
     return (
       <div className="pt-32 pb-20 px-6 bg-slate-100 min-h-screen flex justify-center">
@@ -69,7 +66,6 @@ export default function Eventdetail({ events = [], addToCart }) {
   const formatRupiah = (number) =>
     new Intl.NumberFormat("id-ID").format(number || 0);
 
-  // HANYA ADD TO CART
   const handleAddToCart = () => {
     if (!isAuthenticated) {
       navigate("/login");
@@ -95,7 +91,6 @@ export default function Eventdetail({ events = [], addToCart }) {
           </button>
 
           <div className="grid lg:grid-cols-[420px_1fr] gap-12 items-start">
-            {/* Poster */}
             <div className="flex justify-center relative">
               <img
                 src={event.image}
@@ -114,7 +109,6 @@ export default function Eventdetail({ events = [], addToCart }) {
               )}
             </div>
 
-            {/* Detail */}
             <div className="flex flex-col h-full">
               <div className="mb-6">
                 <h1 className="text-4xl font-extrabold text-slate-900 mb-3">

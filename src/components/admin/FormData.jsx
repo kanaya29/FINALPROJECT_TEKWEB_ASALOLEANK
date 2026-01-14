@@ -24,7 +24,6 @@ const FormData = ({ onAdd, onEdit, editingEvent, setEditingEvent }) => {
     if (editingEvent) {
       setForm({
         ...editingEvent,
-        // Pastikan mapping field konsisten dengan database
         tickets: editingEvent.totalTicket || editingEvent.tickets || "",
         soldTicket: editingEvent.soldTicket || 0 
       });
@@ -43,11 +42,10 @@ const FormData = ({ onAdd, onEdit, editingEvent, setEditingEvent }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // KOREKSI PENTING: Konversi ke Number agar perhitungan stok akurat
     const finalData = {
       ...form,
       price: Number(form.price),
-      totalTicket: Number(form.tickets), // Gunakan nama field totalTicket agar sinkron
+      totalTicket: Number(form.tickets), 
       soldTicket: Number(form.soldTicket)
     };
 
