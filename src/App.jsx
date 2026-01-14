@@ -9,7 +9,12 @@ import CartSidebar from "./components/public/CartSidebar";
 
 import Home from "./pages/Home";
 import Event from "./pages/Event";
-import Eventdetail from "./pages/Eventdetail"; 
+import Eventdetail from "./pages/Eventdetail";
+import CartSidebar from "@/components/public/CartSidebar";
+
+import Home from "./pages/Home";
+import Event from "./pages/Event";
+import Eventdetail from "./pages/Eventdetail";
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/AdminDashboard";
 import DetailAdmin from "./pages/DetailAdmin";
@@ -35,6 +40,55 @@ function App() {
   }, []);
 
   // Fungsi Keranjang
+
+import poster from "./assets/poster.jpg";
+
+function App() {
+  const [events, setEvents] = useState([
+    {
+      id: "1",
+      name: "Jazz Gunung 2025",
+      category: "Music",
+      date: "08-12-2025",
+      price: 750000,
+      location: "Nawang Jagad",
+      description: "Konser jazz etnik di ketinggian 2000mdpl",
+      detail: "Konser dengan suasana alam pegunungan",
+      image: poster,
+      totalTicket: 1000,
+      soldTicket: 999,
+    },
+    {
+      id: "2",
+      name: "Perunggu Festival 2025",
+      category: "Music",
+      date: "20-12-2025",
+      price: 350000,
+      location: "UAD Yogyakarta",
+      description: "Festival musik modern",
+      detail: "Menampilkan musisi nasional",
+      image: poster,
+      totalTicket: 1000,
+      soldTicket: 740,
+    },
+    {
+      id: "3",
+      name: "HUT Kridosono 2025",
+      category: "Dangdut",
+      date: "20-12-2025",
+      price: 350000,
+      location: "Lapangan Kridosono",
+      description: "Pesta rakyat tahunan",
+      detail: "Hiburan dangdut meriah",
+      image: poster,
+      totalTicket: 1000,
+      soldTicket: 740,
+    },
+  ]);
+
+  const [cartItems, setCartItems] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   const addToCart = (event) => {
     const exist = cartItems.find((item) => item.id === event.id);
     if (!exist) {
@@ -45,8 +99,8 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Komponen yang selalu muncul di atas */}
       <Navbar />
+        
       <CartSidebar
         isOpen={isCartOpen}
         setIsOpen={setIsCartOpen}
@@ -54,11 +108,8 @@ function App() {
         setCartItems={setCartItems}
       />
 
-
-      {/* Area Konten Utama */}
       <main className="flex-grow">
         <Routes>
-          {/* Public Routes */}
           <Route path="/" element={<Home events={events} />} />
           <Route 
             path="/event" 
@@ -87,9 +138,40 @@ function App() {
             element={<DetailAdmin events={events} />}
           />
 
-          {/* Fallback & Not Found */}
           <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<Navigate to="/404" />} />
+
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home events={events} />} />
+          <Route
+            path="/event"
+            element={
+              <Event
+                events={events}
+                addToCart={addToCart}
+                setIsCartOpen={setIsCartOpen}
+                cartItemsCount={cartItems.length}
+              />
+            }
+          />
+          <Route
+            path="/event/:id"
+            element={<Eventdetail events={events} addToCart={addToCart} />}
+          />
+          <Route path="/contact" element={<Contact />} />
+
+          <Route
+            path="/admin"
+            element={<AdminDashboard events={events} setEvents={setEvents} />}
+          />
+          <Route
+            path="/admin/detail/:id"
+            element={<DetailAdmin events={events} />}
+          />
+
+          <Route path="*" element={<NotFound />} />
+
         </Routes>
       </main>
 
