@@ -13,6 +13,7 @@ export default function Navbar() {
 
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   if (location.pathname.startsWith("/admin")) {
     return null;
@@ -25,12 +26,15 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full h-20 bg-blue-500 shadow-lg z-50">
-        <div className="max-w-6xl mx-auto h-full px-6 flex justify-between items-center text-white">
 
-          <div className="flex items-center gap-3">
-            <img src={logoBatik} alt="Logo" className="h-10" />
-            <h1 className="text-2xl font-bold">MONGGO TICKET</h1>
+      <header className="fixed top-0 left-0 w-full bg-blue-500 shadow-lg z-50">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 py-4 flex justify-between items-center text-white">
+
+          <div className="flex items-center gap-2">
+            <img src={logoBatik} alt="Logo Monggo Ticket" className="h-10 w-auto" />
+            <h1 className="text-lg md:text-2xl font-bold tracking-wide">
+              MONGGO TICKET
+            </h1>
           </div>
 
           <nav className="hidden md:flex space-x-6 bg-blue-400 rounded-xl px-6 py-2">
@@ -39,10 +43,20 @@ export default function Navbar() {
             <Link to="/contact" className={linkClass("/contact")}>Contact</Link>
           </nav>
 
-          <div className="flex gap-3 items-center">
+          <div className="flex items-center gap-3">
+
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden text-2xl focus:outline-none"
+            >
+              ☰
+            </button>
+
             {user ? (
               <>
-                <span className="text-sm">Hi, {user.name}</span>
+                <span className="hidden sm:block text-sm font-medium">
+                  Hi, {user.name}
+                </span>
                 <button
                   onClick={logout}
                   className="flex items-center gap-2 px-4 py-2 bg-red-500 rounded-lg hover:bg-red-600 transition"
@@ -68,8 +82,21 @@ export default function Navbar() {
               </>
             )}
           </div>
-
         </div>
+
+        {menuOpen && (
+          <div className="md:hidden bg-blue-400 px-4 py-4 space-y-2">
+            <Link to="/" onClick={() => setMenuOpen(false)} className="block text-white">
+              Home
+            </Link>
+            <Link to="/event" onClick={() => setMenuOpen(false)} className="block text-white">
+              Event
+            </Link>
+            <Link to="/contact" onClick={() => setMenuOpen(false)} className="block text-white">
+              Contact
+            </Link>
+          </div>
+        )}
       </header>
 
       <LoginModal open={openLogin} setOpen={setOpenLogin} />
