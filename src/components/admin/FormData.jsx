@@ -166,7 +166,7 @@ const FormData = ({ onAdd, onEdit, editingEvent, setEditingEvent }) => {
           </Button>
         )}
         <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700 transition-colors shadow-md">
-          {editingEvent ? "Perbarui Data" : "Simpan ke Cloud"}
+          {editingEvent ? "Perbarui Data" : "Simpan"}
         </Button>
       </div>
     </form>
